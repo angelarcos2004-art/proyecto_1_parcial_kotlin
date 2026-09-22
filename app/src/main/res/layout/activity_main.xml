@@ -1,19 +1,488 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:background="#121212">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!-- === VISTA DE GALERIA === -->
+    <RelativeLayout
+        android:id="@+id/galleryLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:id="@+id/topBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:background="#121212"
+            android:layout_alignParentTop="true"
+            android:gravity="center">
+
+            <!-- Boton Todas -->
+            <LinearLayout
+                android:id="@+id/btnTabAll"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardTabAll"
+                    android:layout_width="64dp"
+                    android:layout_height="32dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardBackgroundColor="#2D4A45"
+                    app:cardElevation="0dp">
+                    <ImageView
+                        android:id="@+id/iconTabAll"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:src="@android:drawable/ic_menu_gallery"
+                        app:tint="#D0E8E1" />
+                </androidx.cardview.widget.CardView>
+                <TextView
+                    android:id="@+id/textTabAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/todas"
+                    android:textSize="14sp"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"/>
+
+            <!-- Boton Favoritos -->
+            <LinearLayout
+                android:id="@+id/btnTabFavs"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardTabFavs"
+                    android:layout_width="64dp"
+                    android:layout_height="32dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardBackgroundColor="#00000000"
+                    app:cardElevation="0dp">
+                    <ImageView
+                        android:id="@+id/iconTabFavs"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_heart_empty"
+                        app:tint="#888888" />
+                </androidx.cardview.widget.CardView>
+                <TextView
+                    android:id="@+id/textTabFavs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/favoritos"
+                    android:textSize="14sp"
+                    android:textColor="#888888"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bottomBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            android:paddingTop="12dp"
+            android:paddingBottom="24dp"
+            android:background="#1F1F1F">
+
+            <LinearLayout
+                android:id="@+id/btnEdit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@android:drawable/ic_menu_edit"
+                    app:tint="#FFFFFF" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Editar"
+                    android:textSize="12sp"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnFavoriteAction"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    android:id="@+id/iconFavoriteAction"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/ic_heart_empty"
+                    app:tint="#FFFFFF" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Favoritos"
+                    android:textSize="12sp"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnDelete"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@android:drawable/ic_menu_delete"
+                    app:tint="#FF5555" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Eliminar"
+                    android:textSize="12sp"
+                    android:textColor="#FF5555" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/topBar"
+            android:layout_above="@id/bottomBar">
+
+            <RelativeLayout
+                android:id="@+id/singleImageContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/imageContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardBackgroundColor="#222222"
+                    app:cardElevation="8dp">
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerInside" />
+                </androidx.cardview.widget.CardView>
+
+                <!-- Flecha Anterior Flotante -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="16dp"
+                    app:cardCornerRadius="28dp"
+                    app:cardBackgroundColor="#80DEEA"
+                    app:cardElevation="10dp">
+                    <ImageButton
+                        android:id="@+id/btnPrev"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:src="@android:drawable/ic_media_previous"
+                        app:tint="#121212" />
+                </androidx.cardview.widget.CardView>
+
+                <!-- Flecha Siguiente Flotante -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="16dp"
+                    app:cardCornerRadius="28dp"
+                    app:cardBackgroundColor="#80DEEA"
+                    app:cardElevation="10dp">
+                    <ImageButton
+                        android:id="@+id/btnNext"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:src="@android:drawable/ic_media_next"
+                        app:tint="#121212" />
+                </androidx.cardview.widget.CardView>
+
+            </RelativeLayout>
+
+            <GridView
+                android:id="@+id/gridFavorites"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:numColumns="2"
+                android:verticalSpacing="4dp"
+                android:horizontalSpacing="4dp"
+                android:visibility="gone"
+                android:background="#121212" />
+        </FrameLayout>
+    </RelativeLayout>
+
+
+    <!-- === VISTA DE EDITOR === -->
+    <RelativeLayout
+        android:id="@+id/editorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="#121212">
+
+        <LinearLayout
+            android:id="@+id/modeSelector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:orientation="horizontal"
+            android:background="#1F1F1F"
+            android:padding="8dp"
+            android:gravity="center_vertical">
+            <Button
+                android:id="@+id/btnModeDraw"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Dibujar"
+                android:backgroundTint="#444444"
+                android:textColor="#FFFFFF" />
+            <Space android:layout_width="8dp" android:layout_height="wrap_content"/>
+            <Button
+                android:id="@+id/btnModeTransform"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Recortar"
+                android:backgroundTint="#222222"
+                android:textColor="#FFFFFF" />
+            <Space android:layout_width="16dp" android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:id="@+id/btnUndo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="8dp">
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@android:drawable/ic_menu_revert"
+                    app:tint="#FFFFFF" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/editorContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/modeSelector"
+            android:layout_above="@id/editorToolsLayout"
+            android:clipChildren="false"/>
+
+        <LinearLayout
+            android:id="@+id/editorToolsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical"
+            android:background="#000000"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
+
+            <!-- Colores y Goma -->
+            <RelativeLayout
+                android:id="@+id/colorPalette"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/colorRed"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginEnd="12dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardBackgroundColor="#F44336" />
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/colorBlue"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginEnd="12dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardBackgroundColor="#2196F3" />
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/colorGreen"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginEnd="12dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardBackgroundColor="#4CAF50" />
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/colorYellow"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginEnd="12dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardBackgroundColor="#FFEB3B" />
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/colorWhite"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginEnd="12dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardBackgroundColor="#FFFFFF" />
+                </LinearLayout>
+
+                <!-- Borrador circular -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/btnEraser"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    app:cardCornerRadius="20dp"
+                    app:cardBackgroundColor="#1A4A4A"
+                    app:cardElevation="0dp">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:src="@android:drawable/ic_menu_delete"
+                        app:tint="#80DEEA" />
+                </androidx.cardview.widget.CardView>
+            </RelativeLayout>
+
+            <!-- Trazo Slider -->
+            <LinearLayout
+                android:id="@+id/trazoLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="24dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Trazo"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp" />
+
+                <SeekBar
+                    android:id="@+id/sliderTrazo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="16dp"
+                    android:max="100"
+                    android:progress="20"
+                    android:progressTint="#80DEEA"
+                    android:thumbTint="#80DEEA" />
+            </LinearLayout>
+
+            <!-- Botones Guardar/Cancelar -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp">
+
+                <TextView
+                    android:id="@+id/btnCancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:text="Cancelar"
+                    android:textColor="#80DEEA"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:background="?selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="8dp"/>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/btnSave"
+                    android:layout_width="160dp"
+                    android:layout_height="48dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:foreground="?selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardCornerRadius="24dp"
+                    app:cardBackgroundColor="#80DEEA">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Guardar"
+                        android:textColor="#121212"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </androidx.cardview.widget.CardView>
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+</FrameLayout>

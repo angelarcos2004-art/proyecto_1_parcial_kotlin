@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">proyecto_1_parcial_kotlin</string>
+    <string name="todas">Todas</string>
+    <string name="favoritos">Favoritos</string>
 </resources>

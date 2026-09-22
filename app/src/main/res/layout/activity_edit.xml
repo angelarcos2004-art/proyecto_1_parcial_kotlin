@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#121212">
+
+    <LinearLayout
+        android:id="@+id/modeSelector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal"
+        android:background="#1F1F1F"
+        android:padding="8dp">
+        <Button
+            android:id="@+id/btnModeDraw"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Dibujar"
+            android:backgroundTint="#444444"
+            android:textColor="#FFFFFF" />
+        <Space android:layout_width="8dp" android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/btnModeTransform"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Recortar"
+            android:backgroundTint="#222222"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/editorContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/modeSelector"
+        android:layout_above="@id/colorPalette"
+        android:clipChildren="false"/>
+
+    <HorizontalScrollView
+        android:id="@+id/colorPalette"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/editBottomBar"
+        android:background="#1F1F1F"
+        android:scrollbars="none">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="8dp">
+
+            <View android:id="@+id/colorRed" android:layout_width="32dp" android:layout_height="32dp" android:layout_margin="8dp" android:background="#FF0000" />
+            <View android:id="@+id/colorBlue" android:layout_width="32dp" android:layout_height="32dp" android:layout_margin="8dp" android:background="#0000FF" />
+            <View android:id="@+id/colorGreen" android:layout_width="32dp" android:layout_height="32dp" android:layout_margin="8dp" android:background="#00FF00" />
+            <View android:id="@+id/colorYellow" android:layout_width="32dp" android:layout_height="32dp" android:layout_margin="8dp" android:background="#FFFF00" />
+            <View android:id="@+id/colorWhite" android:layout_width="32dp" android:layout_height="32dp" android:layout_margin="8dp" android:background="#FFFFFF" />
+            <View android:id="@+id/colorBlack" android:layout_width="32dp" android:layout_height="32dp" android:layout_margin="8dp" android:background="#000000" />
+            <Button
+                android:id="@+id/btnEraser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Borrar"
+                android:backgroundTint="#555555"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <LinearLayout
+        android:id="@+id/editBottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:background="#1F1F1F">
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#444444"
+            android:textColor="#FFFFFF"
+            android:text="Cancelar" />
+
+        <Space
+            android:layout_width="16dp"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#4CAF50"
+            android:textColor="#FFFFFF"
+            android:text="Guardar" />
+    </LinearLayout>
+
+</RelativeLayout>
