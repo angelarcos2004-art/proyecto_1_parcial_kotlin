@@ -26,12 +26,13 @@ import androidx.core.content.ContextCompat
 
 class MainActivity : AppCompatActivity() {
 
-    // --- GALERIA VARIABLES ---
+    // --- VARIABLES DE GALERÍA ---
     private val imageUris = ArrayList<Uri>()
     private var currentIndex = 0
     private var showFavoritesOnly = false
     private var favoriteUris = ArrayList<Uri>()
 
+    // Referencias a UI de Galería
     private lateinit var galleryLayout: RelativeLayout
     private lateinit var imageView: ImageView
     private lateinit var btnPrev: ImageButton
@@ -41,11 +42,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var gridFavorites: GridView
     private lateinit var singleImageContainer: RelativeLayout
 
-    // --- EDITOR VARIABLES ---
+    // --- VARIABLES DE EDITOR ---
     private lateinit var editorLayout: RelativeLayout
     private lateinit var editorContainer: FrameLayout
     private var editorView: PhotoEditorView? = null
 
+    // Solicitud de permisos
     private val permissionRequest = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
@@ -56,6 +58,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Launcher para petición de borrado en Android 11+
     private val deleteLauncher = registerForActivityResult(
         ActivityResultContracts.StartIntentSenderForResult()
     ) { result ->
@@ -69,10 +72,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Inicialización de layouts principales
         galleryLayout = findViewById(R.id.galleryLayout)
         editorLayout = findViewById(R.id.editorLayout)
 
-        // Setup Galeria
+        // Mapeo de vistas de galería
         imageView = findViewById(R.id.imageView)
         btnPrev = findViewById(R.id.btnPrev)
         btnNext = findViewById(R.id.btnNext)
@@ -81,9 +85,11 @@ class MainActivity : AppCompatActivity() {
         singleImageContainer = findViewById(R.id.singleImageContainer)
         sharedPreferences = getSharedPreferences("GalleryPrefs", MODE_PRIVATE)
 
+        // Eventos de botones de navegación (flechas flotantes)
         btnPrev.setOnClickListener { showPreviousImage() }
         btnNext.setOnClickListener { showNextImage() }
 
+        // Configuración de Gestos (Swipe) en la imagen
         val gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
             override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
                 if (e1 != null) {
@@ -103,18 +109,20 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        findViewById<View>(R.id.btnEdit).setOnClickListener {
+        // Acciones principales de la galería
+        findViewById<LinearLayout>(R.id.btnEdit).setOnClickListener {
             if (imageUris.isNotEmpty()) openEditor()
         }
 
-        findViewById<View>(R.id.btnFavoriteAction).setOnClickListener {
+        findViewById<LinearLayout>(R.id.btnFavoriteAction).setOnClickListener {
             if (imageUris.isNotEmpty()) toggleFavorite(imageUris[currentIndex])
         }
 
-        findViewById<View>(R.id.btnDelete).setOnClickListener {
+        findViewById<LinearLayout>(R.id.btnDelete).setOnClickListener {
             if (imageUris.isNotEmpty()) showDeleteDialog()
         }
 
+        // Abrir visor de imagen desde la cuadrícula (Grid)
         gridFavorites.setOnItemClickListener { _, _, position, _ ->
             gridFavorites.visibility = View.GONE
             singleImageContainer.visibility = View.VISIBLE
@@ -123,6 +131,7 @@ class MainActivity : AppCompatActivity() {
             loadImages(position)
         }
 
+        // Pestaña "Todas las fotos"
         findViewById<View>(R.id.btnTabAll).setOnClickListener {
             showFavoritesOnly = false
             updateTabUI(isFav = false)
@@ -131,6 +140,7 @@ class MainActivity : AppCompatActivity() {
             loadImages()
         }
 
+        // Pestaña "Fotos Favoritas"
         findViewById<View>(R.id.btnTabFavs).setOnClickListener {
             showFavoritesOnly = true
             updateTabUI(isFav = true)
@@ -139,52 +149,41 @@ class MainActivity : AppCompatActivity() {
             loadFavoritesIntoGrid()
         }
 
-        // Setup Editor
+        // Preparación del editor
         editorContainer = findViewById(R.id.editorContainer)
         setupEditorControls()
 
         checkPermissions()
     }
 
+    // Actualiza estilos del Switch (Todas/Favoritos)
     private fun updateTabUI(isFav: Boolean) {
-        val cardTabAll = findViewById<CardView>(R.id.cardTabAll)
-        val iconTabAll = findViewById<ImageView>(R.id.iconTabAll)
+        val cardTabAll = findViewById<LinearLayout>(R.id.btnTabAll).getChildAt(0) as CardView
+        val iconTabAll = cardTabAll.getChildAt(0) as ImageView
         val textTabAll = findViewById<LinearLayout>(R.id.btnTabAll).getChildAt(1) as TextView
 
-        val cardTabFavs = findViewById<CardView>(R.id.cardTabFavs)
-        val iconTabFavs = findViewById<ImageView>(R.id.iconTabFavs)
+        val cardTabFavs = findViewById<LinearLayout>(R.id.btnTabFavs).getChildAt(0) as CardView
+        val iconTabFavs = cardTabFavs.getChildAt(0) as ImageView
         val textTabFavs = findViewById<LinearLayout>(R.id.btnTabFavs).getChildAt(1) as TextView
 
         if (isFav) {
-            // Activar Favoritos
             cardTabFavs.setCardBackgroundColor(Color.parseColor("#2D4A45"))
             iconTabFavs.imageTintList = ColorStateList.valueOf(Color.parseColor("#D0E8E1"))
             textTabFavs.setTextColor(Color.WHITE)
 
-            // Desactivar Todas
             cardTabAll.setCardBackgroundColor(Color.TRANSPARENT)
             iconTabAll.imageTintList = ColorStateList.valueOf(Color.parseColor("#888888"))
             textTabAll.setTextColor(Color.parseColor("#888888"))
         } else {
-            // Activar Todas
             cardTabAll.setCardBackgroundColor(Color.parseColor("#2D4A45"))
             iconTabAll.imageTintList = ColorStateList.valueOf(Color.parseColor("#D0E8E1"))
             textTabAll.setTextColor(Color.WHITE)
 
-            // Desactivar Favoritos
             cardTabFavs.setCardBackgroundColor(Color.TRANSPARENT)
             iconTabFavs.imageTintList = ColorStateList.valueOf(Color.parseColor("#888888"))
             textTabFavs.setTextColor(Color.parseColor("#888888"))
         }
     }
-
-
-
-
-
-
-
-
 
     override fun onResume() {
         super.onResume()
@@ -194,8 +193,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // --- LOGICA DE GALERIA ---
+    // --- LÓGICA DE GALERÍA ---
 
+    // Comprobar y solicitar permisos de almacenamiento
     private fun checkPermissions() {
         val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             arrayOf(Manifest.permission.READ_MEDIA_IMAGES)
@@ -214,6 +214,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Cargar URIs de fotos favoritas en la cuadrícula
     private fun loadFavoritesIntoGrid() {
         favoriteUris.clear()
         val collection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -237,16 +238,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
         
+        // Adapter para renderizar miniaturas
         gridFavorites.adapter = object : BaseAdapter() {
             override fun getCount(): Int = favoriteUris.size
             override fun getItem(position: Int): Any = favoriteUris[position]
             override fun getItemId(position: Int): Long = position.toLong()
             override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
                 val imgView = (convertView as? ImageView) ?: ImageView(this@MainActivity).apply {
-                    layoutParams = AbsListView.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        400
-                    )
+                    layoutParams = AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 400)
                     scaleType = ImageView.ScaleType.CENTER_CROP
                 }
                 
@@ -269,6 +268,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Cargar fotos al visor principal
     private fun loadImages(targetIndex: Int = 0) {
         imageUris.clear()
         val collection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -289,9 +289,7 @@ class MainActivity : AppCompatActivity() {
                 val uri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
                 
                 if (showFavoritesOnly) {
-                    if (favorites.contains(uri.toString())) {
-                        imageUris.add(uri)
-                    }
+                    if (favorites.contains(uri.toString())) imageUris.add(uri)
                 } else {
                     imageUris.add(uri)
                 }
@@ -322,6 +320,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Refresca la foto activa en el visor y el ícono de corazón
     private fun updateImage() {
         if (imageUris.isEmpty()) {
             imageView.setImageDrawable(null)
@@ -336,28 +335,23 @@ class MainActivity : AppCompatActivity() {
         val favorites = sharedPreferences.getStringSet("favorites", mutableSetOf()) ?: mutableSetOf()
         if (favorites.contains(currentUri.toString())) {
             iconFavorite.setImageResource(R.drawable.ic_heart_filled)
-            iconFavorite.imageTintList = ColorStateList.valueOf(Color.parseColor("#FF5252")) // Rojo vibrante
+            iconFavorite.imageTintList = ColorStateList.valueOf(Color.parseColor("#FF5252"))
         } else {
             iconFavorite.setImageResource(R.drawable.ic_heart_empty)
             iconFavorite.imageTintList = ColorStateList.valueOf(Color.WHITE)
         }
     }
 
+    // Guardar o quitar de favoritos (SharedPreferences)
     private fun toggleFavorite(uri: Uri) {
         val favorites = sharedPreferences.getStringSet("favorites", mutableSetOf())?.toMutableSet() ?: mutableSetOf()
         val uriStr = uri.toString()
 
-        if (favorites.contains(uriStr)) {
-            favorites.remove(uriStr)
-        } else {
-            favorites.add(uriStr)
-        }
-
+        if (favorites.contains(uriStr)) favorites.remove(uriStr) else favorites.add(uriStr)
         sharedPreferences.edit().putStringSet("favorites", favorites).apply()
+        
         updateImage()
-        if (gridFavorites.visibility == View.VISIBLE) {
-            loadFavoritesIntoGrid()
-        }
+        if (gridFavorites.visibility == View.VISIBLE) loadFavoritesIntoGrid()
     }
 
     private fun showDeleteDialog() {
@@ -369,6 +363,7 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
+    // Proceso seguro de borrado con MediaStore API (Compatible con Android 11+)
     private fun deleteCurrentPhoto() {
         val uri = imageUris[currentIndex]
         try {
@@ -393,8 +388,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // --- LOGICA DEL EDITOR ---
+    // --- LÓGICA DEL EDITOR ---
 
+    // Ocultar Galería y construir interfaz de Editor
     private fun openEditor() {
         try {
             val uri = imageUris[currentIndex]
@@ -408,7 +404,6 @@ class MainActivity : AppCompatActivity() {
                 editorView?.id = View.generateViewId()
                 editorContainer.addView(editorView)
 
-                // Cambiar vistas
                 galleryLayout.visibility = View.GONE
                 editorLayout.visibility = View.VISIBLE
             } else {
@@ -420,6 +415,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Cerrar Editor y volver a la Galería
     private fun closeEditor() {
         galleryLayout.visibility = View.VISIBLE
         editorLayout.visibility = View.GONE
@@ -427,10 +423,10 @@ class MainActivity : AppCompatActivity() {
         editorView = null
     }
 
+    // Inicializar botones, herramientas y barra de grosores del editor
     private fun setupEditorControls() {
         val btnModeDraw = findViewById<Button>(R.id.btnModeDraw)
         val btnModeTransform = findViewById<Button>(R.id.btnModeTransform)
-        val palette = findViewById<View>(R.id.colorPalette)
 
         btnModeDraw.setOnClickListener {
             editorView?.setMode(PhotoEditorView.Mode.DRAW)
@@ -468,9 +464,7 @@ class MainActivity : AppCompatActivity() {
             selectedView.scaleY = 1.3f
         }
 
-        colors.forEach { (view, color) ->
-            view.setOnClickListener { selectColor(view, color) }
-        }
+        colors.forEach { (view, color) -> view.setOnClickListener { selectColor(view, color) } }
 
         findViewById<View>(R.id.btnEraser).setOnClickListener { 
             editorView?.setEraserMode() 
@@ -482,6 +476,7 @@ class MainActivity : AppCompatActivity() {
             it.scaleY = 1.1f
         }
 
+        // Slider para tamaño de trazo
         val sliderTrazo = findViewById<SeekBar>(R.id.sliderTrazo)
         sliderTrazo.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -492,15 +487,15 @@ class MainActivity : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
-        // default select first color
         selectColor(colors[0].first, colors[0].second)
 
+        // Funciones de acción inferior
         findViewById<View>(R.id.btnUndo).setOnClickListener { editorView?.undo() }
-
         findViewById<View>(R.id.btnCancel).setOnClickListener { closeEditor() }
         findViewById<View>(R.id.btnSave).setOnClickListener { saveEditedImage() }
     }
 
+    // Guarda imagen resultante creando un archivo nuevo en MediaStore
     private fun saveEditedImage() {
         val view = editorView ?: return
         
@@ -561,7 +556,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // --- INNER CLASS PHOTO EDITOR ---
+    // --- CUSTOM VIEW PARA DIBUJO Y RECORTE ---
+    // Clase interna que dibuja el lienzo, los trazos de pincel y el recuadro de recorte
     class PhotoEditorView(context: Context, private val originalBitmap: Bitmap) : View(context) {
 
         enum class Mode { DRAW, CROP }
@@ -572,6 +568,7 @@ class MainActivity : AppCompatActivity() {
         private var imageBounds = RectF()
         private var resizeCorner = -1
 
+        // Zoom Animador
         private var zoomAnimator: ValueAnimator? = null
         private val autoZoomRunnable = Runnable {
             val inverse = Matrix()
@@ -606,11 +603,9 @@ class MainActivity : AppCompatActivity() {
                 addUpdateListener { anim ->
                     val f = anim.animatedFraction
                     val currentValues = FloatArray(9)
-                    for (i in 0..8) {
-                        currentValues[i] = startValues[i] + (endValues[i] - startValues[i]) * f
-                    }
-                    transformMatrix.setValues(currentValues)
+                    for (i in 0..8) currentValues[i] = startValues[i] + (endValues[i] - startValues[i]) * f
                     
+                    transformMatrix.setValues(currentValues)
                     cropRect.left = startCrop.left + (targetCrop.left - startCrop.left) * f
                     cropRect.top = startCrop.top + (targetCrop.top - startCrop.top) * f
                     cropRect.right = startCrop.right + (targetCrop.right - startCrop.right) * f
@@ -657,9 +652,7 @@ class MainActivity : AppCompatActivity() {
             setLayerType(LAYER_TYPE_HARDWARE, null)
         }
 
-        fun setStrokeWidth(width: Float) {
-            currentStrokeWidth = width
-        }
+        fun setStrokeWidth(width: Float) { currentStrokeWidth = width }
 
         fun setMode(mode: Mode) {
             currentMode = mode
@@ -675,18 +668,14 @@ class MainActivity : AppCompatActivity() {
             isEraser = false
         }
 
-        fun setEraserMode() {
-            isEraser = true
-        }
+        fun setEraserMode() { isEraser = true }
 
         fun undo() {
             if (currentMode == Mode.DRAW) {
                 if (paths.isNotEmpty()) {
                     paths.removeAt(paths.size - 1)
                     invalidate()
-                } else {
-                    Toast.makeText(context, "No hay trazos", Toast.LENGTH_SHORT).show()
-                }
+                } else Toast.makeText(context, "No hay trazos", Toast.LENGTH_SHORT).show()
             } else if (currentMode == Mode.CROP) {
                 removeCallbacks(autoZoomRunnable)
                 zoomAnimator?.cancel()
@@ -727,11 +716,11 @@ class MainActivity : AppCompatActivity() {
 
         override fun onDraw(canvas: Canvas) {
             super.onDraw(canvas)
-            
             canvas.save()
             canvas.concat(transformMatrix)
             canvas.drawBitmap(originalBitmap, 0f, 0f, null)
 
+            // Guardar capa para aislar los trazos y que el borrador actúe solo ahí
             canvas.saveLayer(0f, 0f, originalBitmap.width.toFloat(), originalBitmap.height.toFloat(), null)
 
             for (op in paths) {
@@ -751,6 +740,7 @@ class MainActivity : AppCompatActivity() {
             canvas.restore()
             canvas.restore()
 
+            // Dibujar grid de recorte
             if (currentMode == Mode.CROP && !isCapturing) {
                 val w = width.toFloat()
                 val h = height.toFloat()
@@ -774,6 +764,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // Lógica de manipulación de toque (Dibujo o Modificación de Recorte)
         override fun onTouchEvent(event: MotionEvent): Boolean {
             if (currentMode == Mode.CROP) {
                 val x = event.x
@@ -815,6 +806,7 @@ class MainActivity : AppCompatActivity() {
                             else if (resizeCorner == 2 || resizeCorner == 3) cropRect.bottom = cropRect.top + 100f
                         }
 
+                        // Asegurar límites del cuadro al rectángulo original
                         if (cropRect.left < imageBounds.left) cropRect.left = imageBounds.left
                         if (cropRect.top < imageBounds.top) cropRect.top = imageBounds.top
                         if (cropRect.right > imageBounds.right) cropRect.right = imageBounds.right

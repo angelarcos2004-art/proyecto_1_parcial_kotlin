@@ -5,101 +5,46 @@
     android:layout_height="match_parent"
     android:background="#121212">
 
-    <!-- === VISTA DE GALERIA === -->
+    <!-- ========================================== -->
+    <!-- VISTA DE GALERÍA                           -->
+    <!-- Contenedor principal del visor de imágenes -->
+    <!-- ========================================== -->
     <RelativeLayout
         android:id="@+id/galleryLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!-- Barra Superior: Pestañas Todas/Favoritos -->
         <LinearLayout
             android:id="@+id/topBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="16dp"
-            android:background="#121212"
-            android:layout_alignParentTop="true"
-            android:gravity="center">
-
-            <!-- Boton Todas -->
-            <LinearLayout
+            android:padding="8dp"
+            android:background="#1F1F1F"
+            android:layout_alignParentTop="true">
+            <Button
                 android:id="@+id/btnTabAll"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:background="?selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true">
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardTabAll"
-                    android:layout_width="64dp"
-                    android:layout_height="32dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardBackgroundColor="#2D4A45"
-                    app:cardElevation="0dp">
-                    <ImageView
-                        android:id="@+id/iconTabAll"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center"
-                        android:src="@android:drawable/ic_menu_gallery"
-                        app:tint="#D0E8E1" />
-                </androidx.cardview.widget.CardView>
-                <TextView
-                    android:id="@+id/textTabAll"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/todas"
-                    android:textSize="14sp"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
+                android:text="@string/todas"
+                android:backgroundTint="#444444"
+                android:textColor="#FFFFFF"/>
             <Space
-                android:layout_width="32dp"
+                android:layout_width="8dp"
                 android:layout_height="wrap_content"/>
-
-            <!-- Boton Favoritos -->
-            <LinearLayout
+            <Button
                 android:id="@+id/btnTabFavs"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:background="?selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true">
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardTabFavs"
-                    android:layout_width="64dp"
-                    android:layout_height="32dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardBackgroundColor="#00000000"
-                    app:cardElevation="0dp">
-                    <ImageView
-                        android:id="@+id/iconTabFavs"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_heart_empty"
-                        app:tint="#888888" />
-                </androidx.cardview.widget.CardView>
-                <TextView
-                    android:id="@+id/textTabFavs"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/favoritos"
-                    android:textSize="14sp"
-                    android:textColor="#888888"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                android:text="@string/favoritos"
+                android:backgroundTint="#222222"
+                android:textColor="#FFFFFF"/>
         </LinearLayout>
 
+        <!-- Barra Inferior: Herramientas de Galería (Editar, Favorito, Eliminar) -->
         <LinearLayout
             android:id="@+id/bottomBar"
             android:layout_width="match_parent"
@@ -185,12 +130,14 @@
             </LinearLayout>
         </LinearLayout>
 
+        <!-- Contenedor central: Carrusel de imagen individual o Cuadrícula -->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/topBar"
             android:layout_above="@id/bottomBar">
 
+            <!-- Visor de imagen individual y flechas flotantes -->
             <RelativeLayout
                 android:id="@+id/singleImageContainer"
                 android:layout_width="match_parent"
@@ -213,7 +160,7 @@
                         android:scaleType="centerInside" />
                 </androidx.cardview.widget.CardView>
 
-                <!-- Flecha Anterior Flotante -->
+                <!-- Flecha Anterior -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="56dp"
                     android:layout_height="56dp"
@@ -232,7 +179,7 @@
                         app:tint="#121212" />
                 </androidx.cardview.widget.CardView>
 
-                <!-- Flecha Siguiente Flotante -->
+                <!-- Flecha Siguiente -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="56dp"
                     android:layout_height="56dp"
@@ -250,9 +197,9 @@
                         android:src="@android:drawable/ic_media_next"
                         app:tint="#121212" />
                 </androidx.cardview.widget.CardView>
-
             </RelativeLayout>
 
+            <!-- Cuadrícula para fotos favoritas -->
             <GridView
                 android:id="@+id/gridFavorites"
                 android:layout_width="match_parent"
@@ -266,7 +213,10 @@
     </RelativeLayout>
 
 
-    <!-- === VISTA DE EDITOR === -->
+    <!-- ========================================== -->
+    <!-- VISTA DE EDITOR                            -->
+    <!-- Entorno de dibujo y recorte superpuesto    -->
+    <!-- ========================================== -->
     <RelativeLayout
         android:id="@+id/editorLayout"
         android:layout_width="match_parent"
@@ -274,6 +224,7 @@
         android:visibility="gone"
         android:background="#121212">
 
+        <!-- Selector de modo (Dibujar/Recortar) y botón Deshacer -->
         <LinearLayout
             android:id="@+id/modeSelector"
             android:layout_width="match_parent"
@@ -319,6 +270,7 @@
             </LinearLayout>
         </LinearLayout>
 
+        <!-- Lienzo de dibujo y recorte (Custom View) -->
         <FrameLayout
             android:id="@+id/editorContainer"
             android:layout_width="match_parent"
@@ -327,6 +279,7 @@
             android:layout_above="@id/editorToolsLayout"
             android:clipChildren="false"/>
 
+        <!-- Herramientas inferiores del Editor -->
         <LinearLayout
             android:id="@+id/editorToolsLayout"
             android:layout_width="match_parent"
@@ -337,7 +290,7 @@
             android:paddingTop="16dp"
             android:paddingBottom="16dp">
 
-            <!-- Colores y Goma -->
+            <!-- Paleta de colores y Borrador -->
             <RelativeLayout
                 android:id="@+id/colorPalette"
                 android:layout_width="match_parent"
@@ -390,7 +343,6 @@
                         app:cardBackgroundColor="#FFFFFF" />
                 </LinearLayout>
 
-                <!-- Borrador circular -->
                 <androidx.cardview.widget.CardView
                     android:id="@+id/btnEraser"
                     android:layout_width="40dp"
@@ -409,7 +361,7 @@
                 </androidx.cardview.widget.CardView>
             </RelativeLayout>
 
-            <!-- Trazo Slider -->
+            <!-- Control deslizante (Slider) del Grosor del Trazo -->
             <LinearLayout
                 android:id="@+id/trazoLayout"
                 android:layout_width="match_parent"
@@ -484,5 +436,4 @@
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>
-
 </FrameLayout>
